@@ -6,7 +6,7 @@ import pygame
 import sys
 
 # Constants
-WIDTH, HEIGHT = 480, 880  # Dimensions of the game window
+WIDTH, HEIGHT = 880, 880  # Dimensions of the game window
 NUM_ROWS, NUM_COLS = 20, 10  # Number of rows and columns
 PADDING = 1  # Padding in terms of cells
 CELL_SIZE = 40  # Size of each cell in the game window
@@ -46,8 +46,13 @@ def draw_board():
             # Draw cell border in white
             pygame.draw.rect(screen, WHITE, (x, y, CELL_SIZE, CELL_SIZE), 1)
 
+    # Color the right zone in white
+    pygame.draw.rect(screen, WHITE, (BOARD_WIDTH, 0, WIDTH - BOARD_WIDTH, HEIGHT))
+    
+
 def print_end_game():
     """Displays "Game Over!" whenever the player lost"""
+
     font = pygame.font.Font(None, 80)  # Set font and size
     text = font.render("Game Over!", True, "red", "white")
     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
