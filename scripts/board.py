@@ -41,39 +41,52 @@ class Board:
                     if y >= 0 and self.board[y, x] != 0:
                         return False
         return True
+    
+    def clear_lines(self):
+        """Clears completed lines from the board and returns the number of lines cleared."""
+        lines_cleared = 0
+        # Check each row from the bottom up
+        for row in range(self.num_rows - 1, -1, -1):
+            if all(self.board[row, :]):  # Check if row is completely filled
+                # Remove the completed line by moving all rows above down by one
+                self.board[1:row + 1] = self.board[:row]  # Shift rows down
+                self.board[0] = np.zeros(self.num_cols)  # Add an empty row at the top
+                lines_cleared += 1
+
+        return lines_cleared
 
 
-def draw_board(screen):
-    """
-    Function which draws the Tetris board, without any Tetrimino
-    """
+    def draw_board(self, screen):
+        """
+        Function which draws the Tetris board, without any Tetrimino
+        """
 
-    # Draw entire board area including padding
-    for row in range(constants.NUM_ROWS + 2 * constants.PADDING):
-        for col in range(constants.NUM_COLS + 2 * constants.PADDING):
-            x = col * constants.CELL_SIZE
-            y = row * constants.CELL_SIZE
+        # Draw entire board area including padding
+        for row in range(constants.NUM_ROWS + 2 * constants.PADDING):
+            for col in range(constants.NUM_COLS + 2 * constants.PADDING):
+                x = col * constants.CELL_SIZE
+                y = row * constants.CELL_SIZE
 
-            # If cell is off-board / in the padding area, draw in gray
-            if row < constants.PADDING or row >= constants.NUM_ROWS + constants.PADDING \
-                or col < constants.PADDING or col >= constants.NUM_COLS + constants.PADDING:
-                pygame.draw.rect(screen, constants.GRAY, (x, y, constants.CELL_SIZE, constants.CELL_SIZE))
+                # If cell is off-board / in the padding area, draw in gray
+                if row < constants.PADDING or row >= constants.NUM_ROWS + constants.PADDING \
+                    or col < constants.PADDING or col >= constants.NUM_COLS + constants.PADDING:
+                    pygame.draw.rect(screen, constants.GRAY, (x, y, constants.CELL_SIZE, constants.CELL_SIZE))
 
-            # else fill with black rectangles (cell in the board)
-            else:
-                pygame.draw.rect(screen, constants.BLACK, (x, y, constants.CELL_SIZE, constants.CELL_SIZE))
-            
-            # Draw cell borders in white
-            pygame.draw.rect(screen, constants.WHITE, (x, y, constants.CELL_SIZE, constants.CELL_SIZE), 1)
+                # else fill with black rectangles (cell in the board)
+                else:
+                    pygame.draw.rect(screen, constants.BLACK, (x, y, constants.CELL_SIZE, constants.CELL_SIZE))
+                
+                # Draw cell borders in white
+                pygame.draw.rect(screen, constants.WHITE, (x, y, constants.CELL_SIZE, constants.CELL_SIZE), 1)
 
-    # Color the right zone in white (for the score)
-    pygame.draw.rect(screen, constants.WHITE, (constants.BOARD_WIDTH, 0, constants.WIDTH - constants.BOARD_WIDTH, constants.HEIGHT))
+        # Color the right zone in white (for the score)
+        pygame.draw.rect(screen, constants.WHITE, (constants.BOARD_WIDTH, 0, constants.WIDTH - constants.BOARD_WIDTH, constants.HEIGHT))
 
 
-def print_end_game(screen):
-    """Displays "Game Over!" whenever the player lost"""
+    def print_end_game(self, screen):
+        """Displays "Game Over!" whenever the player lost"""
 
-    font = pygame.font.Font(None, 80)  # Set font and size
-    text = font.render("Game Over!", True, "red", "white")
-    text_rect = text.get_rect(center=(constants.WIDTH // 2, constants.HEIGHT // 2))
-    screen.blit(text, text_rect)
+        font = pygame.font.Font(None, 80)  # Set font and size
+        text = font.render("Game Over!", True, "red", "white")
+        text_rect = text.get_rect(center=(constants.WIDTH // 2, constants.HEIGHT // 2))
+        screen.blit(text, text_rect)

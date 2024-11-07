@@ -69,23 +69,3 @@ class Tetrimino:
                 y = row * constants.CELL_SIZE
                 pygame.draw.rect(screen, constants.WHITE, (x, y, constants.CELL_SIZE, constants.CELL_SIZE), 1)
 
-# # Main game loop
-
-# #while True:
-# # pygame setup
-# pygame.init()
-# screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
-# pygame.display.set_caption("Tetris Board")
-# clock = pygame.time.Clock()
-
-# for event in pygame.event.get():
-#     if event.type == pygame.QUIT:
-#         pygame.quit()
-#         sys.exit()
-
-# board.draw_board(screen)
-# piece_example = Tetrimino(shape=constants.SHAPES["S"], color=constants.COLORS["S"])
-# piece_example.draw_piece(screen)
-
-# pygame.display.flip()
-# pygame.time.delay(1000)
