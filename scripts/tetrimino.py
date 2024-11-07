@@ -15,18 +15,43 @@ class Tetrimino:
         self.position = position
         self.rotation = rotation
 
-    def rotate_piece(self):
+    def rotate_piece(self, board_game):
         """Rotates the tetrimino depending on its shape
-        For example, the shape "O" has only one rotation, while the shape "J" has four ones."""
+           For example, the shape "O" has only one rotation, while the shape "J" has four ones.
+           The rotation is canceled if the piece gets in a invalid position
+        """
         self.rotation = (self.rotation + 1) % len(self.shape)
+        if not board_game.is_valid_position(self):
+            # Revert rotation if it's not valid
+            self.rotation = (self.rotation - 1) % len(self.shape)
     
     def get_position(self):
+        """Access to the position of the tetrimino"""
         return self.position
 
     def get_current_shape(self):
         """Returns the state of the tetrimino"""
         return self.shape[self.rotation]
     
+    def move_left(self, board_game):
+        """Move piece left if there is no collision."""
+        if board_game.is_valid_position(self, offset=(-1, 0)):
+            self.position = (self.position[0] - 1, self.position[1])
+
+    def move_right(self, board_game):
+        """Move piece right if there is no collision."""
+        if board_game.is_valid_position(self, offset=(1, 0)):
+            self.position = (self.position[0] + 1, self.position[1])
+
+    def move_down(self, board_game):
+        """Move piece down if there is no collision."""
+        if board_game.is_valid_position(self, offset=(0, 1)):
+            self.position = (self.position[0], self.position[1] + 1)
+        else:
+            # Handle case when piece can't move down (lock piece or spawn new one)
+            pass
+
+
     def draw_piece(self, screen):
         """This function draws the figure in the game board at its initial position"""
         current_shape = self.get_current_shape()
