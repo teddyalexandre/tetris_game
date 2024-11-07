@@ -20,6 +20,9 @@ class Tetrimino:
         For example, the shape "O" has only one rotation, while the shape "J" has four ones."""
         self.rotation = (self.rotation + 1) % len(self.shape)
     
+    def get_position(self):
+        return self.position
+
     def get_current_shape(self):
         """Returns the state of the tetrimino"""
         return self.shape[self.rotation]
