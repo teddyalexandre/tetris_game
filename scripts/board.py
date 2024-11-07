@@ -4,13 +4,29 @@ Represent the board game of Tetris
 
 import pygame
 import constants
+import numpy as np
+
+
+class Board:
+    def __init__(self, num_rows, num_cols):
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+        self.board = np.zeros((num_rows, num_cols))
+    
+    def end_game(self):
+        """Checks if the game is still going or not"""
+        for col_idx in range(self.num_cols):
+            col = self.board[:, col_idx]
+            if col == np.ones_like(col): # If a column is filled with ones, the game ends
+                return True
+        return False
 
 
 def draw_board(screen):
     """
     Function which draws the Tetris board, without any Tetrimino
     """
-    
+
     # Draw entire board area including padding
     for row in range(constants.NUM_ROWS + 2 * constants.PADDING):
         for col in range(constants.NUM_COLS + 2 * constants.PADDING):
@@ -29,7 +45,7 @@ def draw_board(screen):
 
     # Color the right zone in white
     pygame.draw.rect(screen, constants.WHITE, (constants.BOARD_WIDTH, 0, constants.WIDTH - constants.BOARD_WIDTH, constants.HEIGHT))
-    
+
 
 def print_end_game(screen):
     """Displays "Game Over!" whenever the player lost"""

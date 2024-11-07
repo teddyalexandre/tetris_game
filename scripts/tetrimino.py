@@ -1,61 +1,14 @@
 """
 The goal of this file is to represent the pieces of the game : the Tetriminos
 """
+
 import pygame, sys
 import board, constants
-
-# mapping between a letter and its color
-COLORS = {
-    'I': "aqua",
-    'O': "yellow",
-    'T': "purple",
-    'L': "orange",
-    'J': "blue",
-    'Z': "red",
-    "S": "green"
-}
-
-# mapping the tetriminos and their rotations
-SHAPES = {
-    "I": [
-        [[1, 1, 1, 1]],
-        [[0, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0]]
-    ],
-    "O": [
-        [[0, 1, 1, 0], [0, 1, 1, 0]]
-    ],
-    "S": [
-        [[0, 1, 1, 0], [1, 1, 0, 0]],
-        [[0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0]]
-    ],
-    "Z": [
-        [[1, 1, 0, 0], [0, 1, 1, 0]],
-        [[0, 1, 0, 0], [1, 1, 0, 0], [1, 0, 0, 0]]
-    ],
-    "L": [
-        [[0, 0, 1, 0], [1, 1, 1, 0]],
-        [[1, 0, 0, 0], [1, 0, 0, 0], [1, 1, 0, 0]],
-        [[1, 1, 1, 0], [1, 0, 0, 0]],
-        [[0, 1, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0]]
-    ],
-    "J": [
-        [[1, 0, 0, 0], [1, 1, 1, 0]],
-        [[1, 1, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0]],
-        [[1, 1, 1, 0], [0, 0, 1, 0]],
-        [[0, 0, 1, 0], [0, 0, 1, 0], [0, 1, 1, 0]]
-    ],
-    "T": [
-        [[0, 1, 0, 0], [1, 1, 1, 0]],
-        [[0, 1, 0, 0], [0, 1, 1, 0], [0, 1, 0, 0]],
-        [[1, 1, 1, 0], [0, 1, 0, 0]],
-        [[0, 1, 0, 0], [1, 1, 0, 0], [0, 1, 0, 0]]
-    ]
-}
 
 class Tetrimino:
     """This class represents a Tetrimino on the board"""
 
-    def __init__(self, shape, color, position=(5,1), rotation=0):
+    def __init__(self, shape, color, position=(4,1), rotation=0):
         """A piece is defined by its shape, its color and its rotated state"""
         self.shape = shape
         self.color = color
@@ -71,7 +24,8 @@ class Tetrimino:
         """Returns the state of the tetrimino"""
         return self.shape[self.rotation]
     
-    def draw_piece(self):
+    def draw_piece(self, screen):
+        """This function draws the figure in the game board at its initial position"""
         current_shape = self.get_current_shape()
         for row_idx, row in enumerate(current_shape):
             for col_idx, cell in enumerate(row):
@@ -87,23 +41,23 @@ class Tetrimino:
                 y = row * constants.CELL_SIZE
                 pygame.draw.rect(screen, constants.WHITE, (x, y, constants.CELL_SIZE, constants.CELL_SIZE), 1)
 
-# Main game loop
+# # Main game loop
 
-#while True:
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
-pygame.display.set_caption("Tetris Board")
-clock = pygame.time.Clock()
+# #while True:
+# # pygame setup
+# pygame.init()
+# screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
+# pygame.display.set_caption("Tetris Board")
+# clock = pygame.time.Clock()
 
-for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-        pygame.quit()
-        sys.exit()
+# for event in pygame.event.get():
+#     if event.type == pygame.QUIT:
+#         pygame.quit()
+#         sys.exit()
 
-board.draw_board(screen)
-piece_example = Tetrimino(shape=SHAPES["I"], color=COLORS["I"])
-piece_example.draw_piece()
+# board.draw_board(screen)
+# piece_example = Tetrimino(shape=constants.SHAPES["S"], color=constants.COLORS["S"])
+# piece_example.draw_piece(screen)
 
-pygame.display.flip()
-pygame.time.delay(5000)
+# pygame.display.flip()
+# pygame.time.delay(1000)
