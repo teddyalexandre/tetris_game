@@ -67,8 +67,8 @@ class Tetrimino:
         for row_idx, row in enumerate(current_shape):
             for col_idx, cell in enumerate(row):
                 if cell:
-                    x = (self.position[0] + col_idx) * constants.CELL_SIZE
-                    y = (self.position[1] + row_idx) * constants.CELL_SIZE
+                    x = (self.position[0] + col_idx + constants.PADDING) * constants.CELL_SIZE
+                    y = (self.position[1] + row_idx + constants.PADDING) * constants.CELL_SIZE
                     pygame.draw.rect(screen, self.color, (x, y, constants.CELL_SIZE, constants.CELL_SIZE))
 
         # Draw again the white lines that were deleted by the pieces

@@ -12,8 +12,8 @@ class Board:
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
-        self.board = np.zeros((num_rows + 1, num_cols + 1))
-        self.colors = np.full((num_rows + 1, num_cols + 1), None)
+        self.board = np.zeros((num_rows, num_cols))
+        self.colors = np.full((num_rows, num_cols), None)
     
     def end_game(self):
         """Checks if the game is still going or not"""
@@ -33,7 +33,7 @@ class Board:
                     x = tetrimino.get_position()[0] + col_idx
                     y = tetrimino.get_position()[1] + row_idx
                     # Ensure position is within board limits before locking
-                    if 0 <= x < self.num_cols + 1 and 0 <= y < self.num_rows + 1:
+                    if 0 <= x < self.num_cols and 0 <= y < self.num_rows:
                         self.board[y, x] = 1  # Mark cell as occupied by setting it to 1
                         self.colors[y, x] = tetrimino.color
     
@@ -52,7 +52,7 @@ class Board:
 
 
                     # Check boundaries (left, right and down)
-                    if x <= 0 or x >= self.num_cols + 1 or y >= self.num_rows + 1:
+                    if x < 0 or x >= self.num_cols or y >= self.num_rows:
                         return False
                     
                     # Check overlap with other pieces already in the board
@@ -74,6 +74,7 @@ class Board:
                 self.colors[0] = np.full(self.num_cols, None)
                 lines_cleared += 1
 
+        print(self.colors, self.board)
         return lines_cleared
 
 
@@ -105,11 +106,12 @@ class Board:
 
 
     def draw_fixed_pieces(self, screen):
-        for col in range(self.num_cols+1):
-            for row in range(self.num_rows+1):
+        """Draws the figures that lie already on the board"""
+        for col in range(self.num_cols):
+            for row in range(self.num_rows):
                 if self.colors[row, col]:
-                    x = col * constants.CELL_SIZE
-                    y = row * constants.CELL_SIZE
+                    x = (col + constants.PADDING) * constants.CELL_SIZE
+                    y = (row + constants.PADDING) * constants.CELL_SIZE
                     pygame.draw.rect(screen, self.colors[row, col], (x, y, constants.CELL_SIZE, constants.CELL_SIZE))
                     pygame.draw.rect(screen, constants.WHITE, (x, y, constants.CELL_SIZE, constants.CELL_SIZE), 1)
 

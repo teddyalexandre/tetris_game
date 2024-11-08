@@ -74,7 +74,6 @@ def run():
                 # Lock piece in place and check for line clears
                 board.lock_piece(current_tetrimino)
                 board.clear_lines()
-                board.draw_fixed_pieces(screen)
                 generate_new = True
             fall_time = 0
         
