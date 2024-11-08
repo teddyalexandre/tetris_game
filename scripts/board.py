@@ -14,6 +14,7 @@ class Board:
         self.num_cols = num_cols
         self.board = np.zeros((num_rows, num_cols))
         self.colors = np.full((num_rows, num_cols), None)
+        self.score = 0
     
     def end_game(self):
         """Checks if the game is still going or not"""
@@ -74,7 +75,7 @@ class Board:
                 self.colors[0] = np.full(self.num_cols, None)
                 lines_cleared += 1
 
-        print(self.colors, self.board)
+        self.score += lines_cleared * 10
         return lines_cleared
 
 
@@ -104,6 +105,13 @@ class Board:
         # Color the right zone in white (for the score)
         pygame.draw.rect(screen, constants.WHITE, (constants.BOARD_WIDTH, 0, constants.WINDOW_WIDTH - constants.BOARD_WIDTH, constants.WINDOW_HEIGHT))
 
+    
+    def draw_score(self, screen):
+        """Displays the score on the screen"""
+        font = pygame.font.SysFont("Calibri", 50, True, False)
+        score_text = font.render(f"Score = {self.score}", True, constants.BLACK)
+        screen.blit(score_text, [550, 440])
+
 
     def draw_fixed_pieces(self, screen):
         """Draws the figures that lie already on the board"""
@@ -118,7 +126,7 @@ class Board:
     def print_end_game(self, screen):
         """Displays "Game Over!" whenever the player lost"""
 
-        font = pygame.font.Font(None, 80)  # Set font and size
+        font = pygame.font.SysFont("Calibri", 100, True, False)  # Set font and size
         text = font.render("Game Over!", True, "red", "white")
         text_rect = text.get_rect(center=(constants.WINDOW_WIDTH // 2, constants.WINDOW_HEIGHT // 2))
         screen.blit(text, text_rect)

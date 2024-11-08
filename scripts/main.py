@@ -12,9 +12,12 @@ from tetrimino import Tetrimino
 pygame.init()
 pygame.mixer.init()
 
+# Audio management
 pygame.mixer.music.load("./audio/Tetris_theme_type_a.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
+
+# Screen configuration
 screen = pygame.display.set_mode((constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris Board")
 
@@ -39,11 +42,10 @@ def run():
     fall_time = 0
     fall_speed = 1000  # milliseconds between automatic falls
     current_tetrimino = pick_random_tetrimino()  # Initial tetrimino
-    running = True
 
     generate_new = False
     # Main game loop
-    while running:
+    while True:
         fall_time += clock.get_rawtime()
         clock.tick()  # Update the clock for frame timing
 
@@ -92,13 +94,15 @@ def run():
             generate_new = False
             if not board.is_valid_position(current_tetrimino):
                 board.print_end_game(screen)
+                pygame.display.flip()
                 pygame.time.delay(3000)
                 pygame.mixer.quit()
                 pygame.quit()
                 sys.exit()
 
-        # Draw the board and current Tetrimino
+        # Draw the board, the already placed Tetriminos and the moving one
         board.draw_board(screen)
+        board.draw_score(screen)
         board.draw_fixed_pieces(screen)
         current_tetrimino.draw_piece(screen)
         
