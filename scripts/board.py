@@ -13,6 +13,7 @@ class Board:
         self.num_rows = num_rows
         self.num_cols = num_cols
         self.board = np.zeros((num_rows + 1, num_cols + 1))
+        self.colors = np.full((num_rows + 1, num_cols + 1), None)
     
     def end_game(self):
         """Checks if the game is still going or not"""
@@ -32,8 +33,9 @@ class Board:
                     x = tetrimino.get_position()[0] + col_idx
                     y = tetrimino.get_position()[1] + row_idx
                     # Ensure position is within board limits before locking
-                    if 0 <= x < self.num_cols and 0 <= y < self.num_rows:
+                    if 0 <= x < self.num_cols + 1 and 0 <= y < self.num_rows + 1:
                         self.board[y, x] = 1  # Mark cell as occupied by setting it to 1
+                        self.colors[y, x] = tetrimino.color
     
     def is_valid_position(self, tetrimino):
         """Check if the Tetrimino's position is valid within the board boundaries.
@@ -67,6 +69,9 @@ class Board:
                 # Remove the completed line by moving all rows above down by one
                 self.board[1:row + 1] = self.board[:row]  # Shift rows down
                 self.board[0] = np.zeros(self.num_cols)  # Add an empty row at the top
+                # Do the same for colors
+                self.colors[1:row + 1] = self.colors[:row]
+                self.colors[0] = np.full(self.num_cols, None)
                 lines_cleared += 1
 
         return lines_cleared
@@ -98,6 +103,15 @@ class Board:
         # Color the right zone in white (for the score)
         pygame.draw.rect(screen, constants.WHITE, (constants.BOARD_WIDTH, 0, constants.WINDOW_WIDTH - constants.BOARD_WIDTH, constants.WINDOW_HEIGHT))
 
+
+    def draw_fixed_pieces(self, screen):
+        for col in range(self.num_cols+1):
+            for row in range(self.num_rows+1):
+                if self.colors[row, col]:
+                    x = col * constants.CELL_SIZE
+                    y = row * constants.CELL_SIZE
+                    pygame.draw.rect(screen, self.colors[row, col], (x, y, constants.CELL_SIZE, constants.CELL_SIZE))
+                    pygame.draw.rect(screen, constants.WHITE, (x, y, constants.CELL_SIZE, constants.CELL_SIZE), 1)
 
     def print_end_game(self, screen):
         """Displays "Game Over!" whenever the player lost"""

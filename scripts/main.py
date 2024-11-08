@@ -74,6 +74,7 @@ def run():
                 # Lock piece in place and check for line clears
                 board.lock_piece(current_tetrimino)
                 board.clear_lines()
+                board.draw_fixed_pieces(screen)
                 generate_new = True
             fall_time = 0
         
@@ -89,6 +90,7 @@ def run():
 
         # Draw the board and current Tetrimino
         board.draw_board(screen)
+        board.draw_fixed_pieces(screen)
         current_tetrimino.draw_piece(screen)
         
         pygame.display.flip()  # Update the display
