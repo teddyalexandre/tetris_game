@@ -1,11 +1,11 @@
 """This file comprises the different constants used in the project"""
 
-WIDTH, HEIGHT = 880, 880  # Dimensions of the game window
-NUM_ROWS, NUM_COLS = 20, 10  # Number of rows and columns
-PADDING = 1  # Padding in terms of cells
-CELL_SIZE = 40  # Size of each cell in the game window
-BOARD_WIDTH = (NUM_COLS + 2 * PADDING) * CELL_SIZE
-BOARD_HEIGHT = (NUM_ROWS + 2 * PADDING) * CELL_SIZE
+WINDOW_WIDTH, WINDOW_HEIGHT = 880, 880  # Dimensions of the whole window
+NUM_ROWS, NUM_COLS = 20, 10  # Number of rows and columns of the board
+PADDING = 1  # Padding size of the board
+CELL_SIZE = 40  # Size of each cell in the window
+BOARD_WIDTH = (NUM_COLS + 2 * PADDING) * CELL_SIZE  # Width occupied by the board in the whole window
+BOARD_HEIGHT = (NUM_ROWS + 2 * PADDING) * CELL_SIZE # Height occupied by the board in the whole window
 
 # Colors
 BLACK = (0, 0, 0)

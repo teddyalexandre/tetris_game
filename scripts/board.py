@@ -96,7 +96,7 @@ class Board:
                 pygame.draw.rect(screen, constants.WHITE, (x, y, constants.CELL_SIZE, constants.CELL_SIZE), 1)
 
         # Color the right zone in white (for the score)
-        pygame.draw.rect(screen, constants.WHITE, (constants.BOARD_WIDTH, 0, constants.WIDTH - constants.BOARD_WIDTH, constants.HEIGHT))
+        pygame.draw.rect(screen, constants.WHITE, (constants.BOARD_WIDTH, 0, constants.WINDOW_WIDTH - constants.BOARD_WIDTH, constants.WINDOW_HEIGHT))
 
 
     def print_end_game(self, screen):
@@ -104,5 +104,5 @@ class Board:
 
         font = pygame.font.Font(None, 80)  # Set font and size
         text = font.render("Game Over!", True, "red", "white")
-        text_rect = text.get_rect(center=(constants.WIDTH // 2, constants.HEIGHT // 2))
+        text_rect = text.get_rect(center=(constants.WINDOW_WIDTH // 2, constants.WINDOW_HEIGHT // 2))
         screen.blit(text, text_rect)

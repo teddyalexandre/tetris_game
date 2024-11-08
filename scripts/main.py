@@ -4,13 +4,13 @@ This file proceeds to run the Tetris game
 import random
 import sys
 import pygame
-import constants  # Assume this includes your constants, like screen dimensions and colors
+import constants 
 from board import Board
-from tetrimino import Tetrimino  # Assuming these are in separate files
+from tetrimino import Tetrimino
 
 # Initialize Pygame and screen
 pygame.init()
-screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
+screen = pygame.display.set_mode((constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris Board")
 
 # Initialize game components
@@ -22,8 +22,8 @@ clock = pygame.time.Clock()
 
 def pick_random_tetrimino():
     """Picks a tetrimino randomly"""
-    letters = constants.SHAPES.keys()
-    random_letter = random.choice(list(letters))
+    letters = list(constants.SHAPES.keys())
+    random_letter = random.choice(letters)
     return Tetrimino(shape=constants.SHAPES[random_letter], color=constants.COLORS[random_letter])
 
 
@@ -33,11 +33,12 @@ def run():
     """
     fall_time = 0
     fall_speed = 1000  # milliseconds between automatic falls
-    current_tetrimino = pick_random_tetrimino()
+    current_tetrimino = pick_random_tetrimino()  # Initial tetrimino
+    running = True
 
+    generate_new = False
     # Main game loop
-    while True:
-        screen.fill(constants.BLACK)
+    while running:
         fall_time += clock.get_rawtime()
         clock.tick()  # Update the clock for frame timing
 
@@ -53,6 +54,7 @@ def run():
                 # Left movement
                 if event.key == pygame.K_LEFT:
                     current_tetrimino.move_left(board)
+
                 # Right movement
                 elif event.key == pygame.K_RIGHT:
                     current_tetrimino.move_right(board)
@@ -67,18 +69,23 @@ def run():
 
         # Automatically move the Tetrimino down
         if fall_time >= fall_speed:
+            # If the Tetrimino is blocked or has reached the bottom of the board
             if not current_tetrimino.move_down(board):
                 # Lock piece in place and check for line clears
-                #board.lock_piece(current_tetrimino)
+                board.lock_piece(current_tetrimino)
                 board.clear_lines()
-                # Create a new piece
-                #current_tetrimino = pick_random_tetrimino()
-                if not board.is_valid_position(current_tetrimino):
-                    print("Game Over!")
-                    pygame.quit()
-                    sys.exit()
+                generate_new = True
             fall_time = 0
         
+        if generate_new:
+            # Create a new piece
+            current_tetrimino = pick_random_tetrimino()
+            generate_new = False
+            if not board.is_valid_position(current_tetrimino):
+                board.print_end_game(screen)
+                pygame.time.delay(3000)
+                pygame.quit()
+                sys.exit()
 
         # Draw the board and current Tetrimino
         board.draw_board(screen)
