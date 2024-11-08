@@ -10,6 +10,11 @@ from tetrimino import Tetrimino
 
 # Initialize Pygame and screen
 pygame.init()
+pygame.mixer.init()
+
+pygame.mixer.music.load("./audio/Tetris_theme_type_a.mp3")
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 screen = pygame.display.set_mode((constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris Board")
 
@@ -46,6 +51,7 @@ def run():
         for event in pygame.event.get():
             # If the player quits the window, end everything
             if event.type == pygame.QUIT:
+                pygame.mixer.quit()
                 pygame.quit()
                 sys.exit()
             
@@ -71,9 +77,12 @@ def run():
         if fall_time >= fall_speed:
             # If the Tetrimino is blocked or has reached the bottom of the board
             if not current_tetrimino.move_down(board):
-                # Lock piece in place and check for line clears
+                # Lock piece in place
                 board.lock_piece(current_tetrimino)
+
+                # Clear the lines if necessary and update the window
                 board.clear_lines()
+                board.draw_fixed_pieces(screen)
                 generate_new = True
             fall_time = 0
         
@@ -84,6 +93,7 @@ def run():
             if not board.is_valid_position(current_tetrimino):
                 board.print_end_game(screen)
                 pygame.time.delay(3000)
+                pygame.mixer.quit()
                 pygame.quit()
                 sys.exit()
 
