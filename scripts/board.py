@@ -8,10 +8,11 @@ import numpy as np
 
 
 class Board:
+    """This class manages the events on the game board"""
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
-        self.board = np.zeros((num_rows, num_cols))
+        self.board = np.zeros((num_rows + 1, num_cols + 1))
     
     def end_game(self):
         """Checks if the game is still going or not"""
@@ -21,20 +22,35 @@ class Board:
                 return True
         return False
     
-    def is_valid_position(self, tetrimino, offset=(0, 0)):
+    def lock_piece(self, tetrimino):
+        """Locks the current Tetrimino in place on the board."""
+        shape = tetrimino.get_current_shape()
+        for row_idx, row in enumerate(shape):
+            for col_idx, cell in enumerate(row):
+                if cell:
+                    # Calculate the board position
+                    x = tetrimino.get_position()[0] + col_idx
+                    y = tetrimino.get_position()[1] + row_idx
+                    # Ensure position is within board limits before locking
+                    if 0 <= x < self.num_cols and 0 <= y < self.num_rows:
+                        self.board[y, x] = 1  # Mark cell as occupied by setting it to 1
+    
+    def is_valid_position(self, tetrimino):
         """Check if the Tetrimino's position is valid within the board boundaries.
            It also prevents overlapping with other pieces with an offset"""
         
         shape = tetrimino.get_current_shape()
         for row_idx, row in enumerate(shape):
             for col_idx, cell in enumerate(row):
+                # If the cell represents a piece of tetrimino
                 if cell:
-                    # Calculate the absolute position on the board
-                    x = tetrimino.get_position()[0] + col_idx + offset[0]
-                    y = tetrimino.get_position()[1] + row_idx + offset[1]
+                    # Calculate its absolute position on the board
+                    x = tetrimino.get_position()[0] + col_idx
+                    y = tetrimino.get_position()[1] + row_idx
 
-                    # Check boundaries
-                    if x < 0 or x >= self.num_cols or y >= self.num_rows:
+
+                    # Check boundaries (left, right and down)
+                    if x <= 0 or x >= self.num_cols + 1 or y >= self.num_rows + 1:
                         return False
                     
                     # Check overlap with other pieces already in the board
