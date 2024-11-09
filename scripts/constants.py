@@ -1,4 +1,4 @@
-"""This file comprises the different constants used in the project"""
+"""This file gathers the different constants used in the project"""
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 880, 880  # Dimensions of the whole window
 NUM_ROWS, NUM_COLS = 20, 10  # Number of rows and columns of the board

@@ -9,7 +9,6 @@ INITIAL_POSITION = ((constants.NUM_COLS - 1) // 2, constants.PADDING)
 
 class Tetrimino:
     """This class represents a Tetrimino on the board"""
-
     def __init__(self, shape, color, position=INITIAL_POSITION, rotation=0):
         """A tetrimino is defined by its shape, its color and its rotated state"""
         self.shape = shape
@@ -54,7 +53,6 @@ class Tetrimino:
     def move_down(self, board_game):
         """Move piece down if there is no collision."""
         self.position = (self.position[0], self.position[1] + 1)
-        
         # Handle case when piece can't move down (lock piece or spawn new one)
         if not board_game.is_valid_position(self):
             self.position = (self.position[0], self.position[1] - 1)

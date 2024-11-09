@@ -1,5 +1,5 @@
 """
-Represent the board game of Tetris
+This file contains the class which manages the board game of Tetris
 """
 
 import pygame
@@ -8,7 +8,7 @@ import numpy as np
 
 
 class Board:
-    """This class manages the events on the game board"""
+    """This class manages the events on the game board, the placement of the tetriminoes"""
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
@@ -20,7 +20,7 @@ class Board:
         """Checks if the game is still going or not"""
         for col_idx in range(self.num_cols):
             col = self.board[:, col_idx]
-            if col == np.ones_like(col): # If a column is filled with ones, the game ends
+            if np.array_equal(col, np.ones_like(col)): # If a column is filled with ones, the game ends
                 return True
         return False
     
@@ -41,7 +41,6 @@ class Board:
     def is_valid_position(self, tetrimino):
         """Check if the Tetrimino's position is valid within the board boundaries.
            It also prevents overlapping with other pieces with an offset"""
-        
         shape = tetrimino.get_current_shape()
         for row_idx, row in enumerate(shape):
             for col_idx, cell in enumerate(row):
@@ -83,7 +82,6 @@ class Board:
         """
         Function which draws the Tetris board, without any Tetrimino
         """
-
         # Draw entire board area including padding
         for row in range(constants.NUM_ROWS + 2 * constants.PADDING):
             for col in range(constants.NUM_COLS + 2 * constants.PADDING):
@@ -125,7 +123,6 @@ class Board:
 
     def print_end_game(self, screen):
         """Displays "Game Over!" whenever the player lost"""
-
         font = pygame.font.SysFont("Calibri", 100, True, False)  # Set font and size
         text = font.render("Game Over!", True, "red", "white")
         text_rect = text.get_rect(center=(constants.WINDOW_WIDTH // 2, constants.WINDOW_HEIGHT // 2))

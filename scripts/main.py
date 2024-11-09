@@ -1,6 +1,7 @@
 """
 This file proceeds to run the Tetris game
 """
+
 import random
 import sys
 import pygame
@@ -8,11 +9,11 @@ import constants
 from board import Board
 from tetrimino import Tetrimino
 
-# Initialize Pygame and screen
+# Initialize Pygame
 pygame.init()
-pygame.mixer.init()
 
 # Audio management
+pygame.mixer.init()
 pygame.mixer.music.load("./audio/Tetris_theme_type_a.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
@@ -79,12 +80,14 @@ def run():
         if fall_time >= fall_speed:
             # If the Tetrimino is blocked or has reached the bottom of the board
             if not current_tetrimino.move_down(board):
-                # Lock piece in place
+                # Lock the current piece
                 board.lock_piece(current_tetrimino)
 
                 # Clear the lines if necessary and update the window
-                board.clear_lines()
-                board.draw_fixed_pieces(screen)
+                while board.clear_lines():
+                    board.draw_fixed_pieces(screen)
+                    pygame.display.flip()
+                # Allow generation of a new piece
                 generate_new = True
             fall_time = 0
         
@@ -92,7 +95,9 @@ def run():
             # Create a new piece
             current_tetrimino = pick_random_tetrimino()
             generate_new = False
-            if not board.is_valid_position(current_tetrimino):
+
+            # Manage end of the game
+            if not board.is_valid_position(current_tetrimino) or board.end_game():
                 board.print_end_game(screen)
                 pygame.display.flip()
                 pygame.time.delay(3000)
@@ -105,7 +110,6 @@ def run():
         board.draw_score(screen)
         board.draw_fixed_pieces(screen)
         current_tetrimino.draw_piece(screen)
-        
         pygame.display.flip()  # Update the display
 
 
